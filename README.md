@@ -1,22 +1,22 @@
-# DataAlchemy
+# SyntheticDataAlchemy
 
-DataAlchemy is a Python package for generating synthetic data that preserves the statistical properties and relationships of the original dataset.
+SyntheticDataAlchemy is a Python package for generating synthetic data that preserves the statistical properties and relationships of the original dataset.
 
 ## Installation
 
-You can install DataAlchemy using pip:
+You can install SyntheticDataAlchemy using pip:
 
 ```
-pip install DataAlchemy
+pip install SyntheticDataAlchemy
 ```
 
 ## Usage
 
-Here's a simple example of how to use DataAlchemy:
+Here's a simple example of how to use SyntheticDataAlchemy:
 
 ```python
 import pandas as pd
-from DataAlchemy import generate_synthetic_data
+from SyntheticDataAlchemy import generate_synthetic_data
 
 # Load your original data
 original_df = pd.read_csv('your_data.csv')
