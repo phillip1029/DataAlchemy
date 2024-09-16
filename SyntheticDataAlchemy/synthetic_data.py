@@ -28,7 +28,8 @@ def generate_synthetic_data(df, n_samples, random_state=None, kde_bandwidth=None
     if df.empty:
         raise ValueError("Input DataFrame is empty.")
     
-    if not set(df.dtypes).issubset([np.int64, np.float64, object, 'category']):
+    supported_types = ['int', 'float', 'object', 'category']
+    if not all(any(typ in str(dtype) for typ in supported_types) for dtype in df.dtypes):
         raise ValueError("Input DataFrame contains unsupported data types.")
     
     # Set random seed if provided
@@ -69,10 +70,14 @@ def generate_synthetic_data(df, n_samples, random_state=None, kde_bandwidth=None
     for cat_col in cat_cols:
         encoder = TargetEncoder()
         for num_col in num_cols:
-            encoded_col = encoder.fit_transform(df[cat_col], df[num_col]).squeeze()
-            correlation = df[num_col].corr(encoded_col)
+            encoded_original = encoder.fit_transform(df[cat_col], df[num_col])
+            encoded_synthetic = encoder.transform(synthetic_df[cat_col])
+            
+            # Calculate correlation using pandas
+            correlation = df[num_col].corr(encoded_original[cat_col])
+            
             if abs(correlation) > correlation_threshold:
-                synthetic_df[num_col] += (encoder.transform(synthetic_df[cat_col]).squeeze() - encoded_col.mean()) * correlation
+                synthetic_df[num_col] += (encoded_synthetic[cat_col] - encoded_original[cat_col].mean()) * correlation
     
     return synthetic_df
 
